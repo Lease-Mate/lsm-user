@@ -1,5 +1,9 @@
 server:
   port: 8041
+  tomcat:
+    accesslog:
+      enabled: true
+    basedir: log/tomcat
 
 spring:
   application:
