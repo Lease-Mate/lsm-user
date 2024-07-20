@@ -1,7 +1,6 @@
 package com.lsm.ws.user.configuration.exception;
 
 import com.lsm.ws.user.configuration.exception.dto.ErrorResponse;
-import com.lsm.ws.user.configuration.exception.unauthorized.JwtAuthenticationException;
 import com.lsm.ws.user.configuration.exception.unauthorized.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ public class GlobalExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(JwtAuthenticationException.class)
+    @ExceptionHandler(UnauthorizedException.class)
     ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException exception, WebRequest webRequest) {
         LOGGER.info("HTTP 403 - Unauthorized request {} reason: {}",
                 webRequest.getDescription(false), exception.getMessage());

@@ -8,10 +8,12 @@ import com.lsm.ws.user.infrastructure.jwt.JwtType;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.UUID;
 
+@Configuration
 public class RequestContextFactory {
     private final JwtExtractor jwtExtractor;
     private final HttpServletRequest request;

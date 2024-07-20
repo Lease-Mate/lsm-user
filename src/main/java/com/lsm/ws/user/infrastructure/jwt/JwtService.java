@@ -3,12 +3,9 @@ package com.lsm.ws.user.infrastructure.jwt;
 import com.lsm.ws.user.configuration.properties.JwtProperties;
 import com.lsm.ws.user.domain.user.User;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
@@ -16,9 +13,11 @@ import java.util.Date;
 public class JwtService {
 
     private final JwtProperties jwtProperties;
+    private final JwtExtractor jwtExtractor;
 
-    public JwtService(JwtProperties jwtProperties) {
+    public JwtService(JwtProperties jwtProperties, JwtExtractor jwtExtractor) {
         this.jwtProperties = jwtProperties;
+        this.jwtExtractor = jwtExtractor;
     }
 
     public TokenPair generateWebToken(User user) {
@@ -31,7 +30,7 @@ public class JwtService {
         return Jwts.builder()
                    .claim(JwtClaims.TYPE, jwtType.name())
                    .claim(JwtClaims.ROLE, user.role().name())
-                   .claim(JwtClaims.USER_ID,user.id().toString())
+                   .claim(JwtClaims.USER_ID, user.id().toString())
                    .issuedAt(new Date(System.currentTimeMillis()))
                    .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.tokenExpiration()))
                    .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
@@ -47,5 +46,19 @@ public class JwtService {
                    .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.refreshTokenExpiration()))
                    .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
                    .compact();
+    }
+
+    public TokenPair refreshToken(String originalToken) {
+        var claims = jwtExtractor.validateTokenAndExtractClaims(originalToken);
+
+        var newToken = Jwts.builder()
+                           .claims(claims)
+                           .issuedAt(new Date(System.currentTimeMillis()))
+                           .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.refreshTokenExpiration()))
+                           .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
+                           .compact();
+        var refreshToken = generateRefreshToken(newToken);
+
+        return new TokenPair(newToken, refreshToken);
     }
 }

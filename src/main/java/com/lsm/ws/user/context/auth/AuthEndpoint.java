@@ -42,7 +42,7 @@ public class AuthEndpoint {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Void> refresh() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AuthResponse> refresh() {
+        return ResponseEntity.ok(authService.refresh());
     }
 }
