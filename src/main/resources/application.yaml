@@ -1,0 +1,16 @@
+server:
+  port: 8041
+  tomcat:
+    accesslog:
+      enabled: true
+    basedir: log/tomcat
+
+spring:
+  application:
+    name: lsm-user
+  datasource:
+    username: lsm_user
+  liquibase:
+    change-log: db/changelog/changelog.yml
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration

@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.0
+      author: fpamula
+      changes:
+        - createTable:
+            tableName: APP_USER
+            columns:
+              - column:
+                  name: ID
+                  type: char(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: EMAIL
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: PASSWORD
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ROLE
+                  type: varchar(30)
+              - column:
+                  name: NAME
+                  type: varchar(255)
+              - column:
+                  name: SURNAME
+                  type: varchar(255)
+              - column:
+                  name: DATE_OF_BIRTH
+                  type: date
