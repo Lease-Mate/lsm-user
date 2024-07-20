@@ -44,8 +44,8 @@ public class AuthService {
                        .build();
         user = userRepository.save(user);
 
-        var token = jwtService.generateWebToken(user);
-        return new AuthResponse(token);
+        var tokenPair = jwtService.generateWebToken(user);
+        return AuthResponse.from(tokenPair);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -56,8 +56,8 @@ public class AuthService {
             throw new InvalidCredentialsException();
         }
 
-        var token = jwtService.generateWebToken(user);
-        return new AuthResponse(token);
+        var tokenPair = jwtService.generateWebToken(user);
+        return AuthResponse.from(tokenPair);
     }
 
     private boolean arePasswordMatching(String password, byte[] encodedPassword) {

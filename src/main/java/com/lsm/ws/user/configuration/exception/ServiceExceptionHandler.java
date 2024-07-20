@@ -1,5 +1,6 @@
 package com.lsm.ws.user.configuration.exception;
 
+import com.lsm.ws.user.configuration.exception.dto.ErrorCodeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -18,10 +19,10 @@ public class ServiceExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceExceptionHandler.class);
 
     @ExceptionHandler(ValidationException.class)
-    ResponseEntity<ErrorResponse> handleValidationException(ValidationException exception, WebRequest webRequest) {
+    ResponseEntity<ErrorCodeResponse> handleValidationException(ValidationException exception, WebRequest webRequest) {
         LOGGER.info("HTTP 400 - Invalid request {} CODE: {} reason: {}",
                 webRequest.getDescription(false), exception.code(), exception.getMessage());
-        var responseBody = new ErrorResponse(exception.code(), exception.getMessage());
+        var responseBody = new ErrorCodeResponse(exception.code(), exception.getMessage());
         return new ResponseEntity<>(responseBody, BAD_REQUEST);
     }
 }

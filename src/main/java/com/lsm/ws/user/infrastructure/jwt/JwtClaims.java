@@ -1,17 +1,9 @@
 package com.lsm.ws.user.infrastructure.jwt;
 
-public enum JwtClaims {
+public final class JwtClaims {
 
-    TYPE("type"),
-    ROLE("role");
-
-    private final String value;
-
-    JwtClaims(String value) {
-        this.value = value;
-    }
-
-    public String value() {
-        return value;
-    }
+    public static final String TYPE = "type";
+    public static final String ROLE = "role";
+    public static final String USER_ID= "userId";
+    public static final String ORIGINAL_TOKEN = "originalJwt";
 }

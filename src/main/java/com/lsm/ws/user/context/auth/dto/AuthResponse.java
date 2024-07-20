@@ -1,4 +1,10 @@
 package com.lsm.ws.user.context.auth.dto;
 
-public record AuthResponse(String accessToken) {
+import com.lsm.ws.user.infrastructure.jwt.TokenPair;
+
+public record AuthResponse(String accessToken, String refreshToken) {
+
+    public static AuthResponse from(TokenPair tokenPair) {
+        return new AuthResponse(tokenPair.authToken, tokenPair.refreshToken);
+    }
 }

@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.lsm.ws.user.configuration.swagger.SWC.*;
+import static com.lsm.ws.user.configuration.swagger.SWC.AUTH_LOGIN;
+import static com.lsm.ws.user.configuration.swagger.SWC.AUTH_LOGIN_DESC;
+import static com.lsm.ws.user.configuration.swagger.SWC.AUTH_REGISTER;
+import static com.lsm.ws.user.configuration.swagger.SWC.AUTH_REGISTER_DESC;
+import static com.lsm.ws.user.configuration.swagger.SWC.AUTH_SERVICES;
 
 @RestController
 @RequestMapping("/v1/api/user/auth")
@@ -35,5 +39,10 @@ public class AuthEndpoint {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<Void> refresh() {
+        return ResponseEntity.ok().build();
     }
 }
