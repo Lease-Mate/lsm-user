@@ -14,3 +14,7 @@ spring:
     change-log: db/changelog/changelog.yml
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
+jwt:
+  token-expiration: 10
+  refresh-token-expiration: 20

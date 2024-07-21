@@ -5,4 +5,3 @@ spring:
 
 jwt:
   secret: 2f0af0812b8833d148fca81f1de3e20fe99f4270077e34d293cfe81dd9d1be5b
-  token-expiration: 10

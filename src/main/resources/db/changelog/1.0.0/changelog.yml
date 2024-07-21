@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: PASSWORD
-                  type: varchar(255)
+                  type: bytea
                   constraints:
                     nullable: false
               - column:

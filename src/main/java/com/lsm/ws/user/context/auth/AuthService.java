@@ -9,6 +9,7 @@ import com.lsm.ws.user.domain.user.User;
 import com.lsm.ws.user.domain.user.UserRepository;
 import com.lsm.ws.user.domain.user.UserRole;
 import com.lsm.ws.user.infrastructure.jwt.JwtService;
+import com.lsm.ws.user.infrastructure.rest.context.RequestContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,17 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final RequestContext requestContext;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            RequestContext requestContext) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.requestContext = requestContext;
     }
 
     @Transactional
@@ -44,8 +51,8 @@ public class AuthService {
                        .build();
         user = userRepository.save(user);
 
-        var token = jwtService.generateWebToken(user);
-        return new AuthResponse(token);
+        var tokenPair = jwtService.generateUserWebToken(user);
+        return AuthResponse.from(tokenPair);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -56,11 +63,16 @@ public class AuthService {
             throw new InvalidCredentialsException();
         }
 
-        var token = jwtService.generateWebToken(user);
-        return new AuthResponse(token);
+        var tokenPair = jwtService.generateUserWebToken(user);
+        return AuthResponse.from(tokenPair);
     }
 
     private boolean arePasswordMatching(String password, byte[] encodedPassword) {
         return passwordEncoder.matches(password, new String(encodedPassword));
+    }
+
+    public AuthResponse refresh() {
+        var tokenPair = jwtService.refreshToken(requestContext.originalToken());
+        return AuthResponse.from(tokenPair);
     }
 }

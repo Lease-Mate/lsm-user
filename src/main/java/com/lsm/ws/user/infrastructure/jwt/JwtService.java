@@ -3,12 +3,9 @@ package com.lsm.ws.user.infrastructure.jwt;
 import com.lsm.ws.user.configuration.properties.JwtProperties;
 import com.lsm.ws.user.domain.user.User;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,30 +15,48 @@ import java.util.Map;
 public class JwtService {
 
     private final JwtProperties jwtProperties;
+    private final JwtExtractor jwtExtractor;
 
-    public JwtService(JwtProperties jwtProperties) {
+    public JwtService(JwtProperties jwtProperties, JwtExtractor jwtExtractor) {
         this.jwtProperties = jwtProperties;
+        this.jwtExtractor = jwtExtractor;
     }
 
-    public String generateWebToken(User user) {
-        Map<String, String> claims = new HashMap<>();
-        claims.put(JwtClaims.TYPE.value(), JwtType.WEB.name());
-        claims.put(JwtClaims.ROLE.value(), user.role().name());
-        return generateToken(claims, user);
+    public TokenPair generateUserWebToken(User user) {
+        return generateWebToken(user, JwtType.WEB);
     }
 
-    private String generateToken(Map<String, String> claims, User user) {
+    private TokenPair generateWebToken(User user, JwtType jwtType) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaims.TYPE, jwtType.name());
+        claims.put(JwtClaims.ROLE, user.role().name());
+        claims.put(JwtClaims.USER_ID, user.id().toString());
+        var token = generateToken(claims, jwtProperties.tokenExpiration());
+        var refreshToken = generateRefreshToken(token);
+        return new TokenPair(token, refreshToken);
+    }
+
+    public TokenPair refreshToken(String originalToken) {
+        var claims = jwtExtractor.validateTokenAndExtractClaims(originalToken);
+
+        var newToken = generateToken(claims, jwtProperties.tokenExpiration());
+        var refreshToken = generateRefreshToken(newToken);
+        return new TokenPair(newToken, refreshToken);
+    }
+
+    private String generateRefreshToken(String token) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaims.TYPE, JwtType.REFRESH.name());
+        claims.put(JwtClaims.ORIGINAL_TOKEN, token);
+        return generateToken(claims, jwtProperties.refreshTokenExpiration());
+    }
+
+    private String generateToken(Map<String, Object> claims, Integer expirationInMinutes) {
         return Jwts.builder()
                    .claims(claims)
-                   .subject(user.id().toString())
                    .issuedAt(new Date(System.currentTimeMillis()))
-                   .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.tokenExpiration()))
-                   .signWith(getSignKey(), Jwts.SIG.HS256)
+                   .expiration(new Date(System.currentTimeMillis() + 60_000L * expirationInMinutes))
+                   .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
                    .compact();
-    }
-
-    private SecretKey getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.secret());
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

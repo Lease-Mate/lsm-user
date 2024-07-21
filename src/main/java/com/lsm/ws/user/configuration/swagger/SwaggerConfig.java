@@ -1,7 +1,10 @@
 package com.lsm.ws.user.configuration.swagger;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +26,19 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI().info(new Info().description("Demo user microservice")
-                                            .title("User microservice"))
-                            .addServersItem(new Server().url("/"));
+        var openApi = new OpenAPI().info(new Info().description("Demo user microservice")
+                                                   .title("User microservice"))
+                                   .addServersItem(new Server().url("/"));
+        addAuthBearer(openApi);
+        return openApi;
+    }
+
+    private void addAuthBearer(OpenAPI openAPI) {
+        openAPI.addSecurityItem(new SecurityRequirement().addList("authBearer"))
+               .components(new Components().addSecuritySchemes("authBearer",
+                       new SecurityScheme().name("authBearer")
+                                           .type(SecurityScheme.Type.HTTP)
+                                           .scheme("bearer")
+                                           .bearerFormat("JWT")));
     }
 }
