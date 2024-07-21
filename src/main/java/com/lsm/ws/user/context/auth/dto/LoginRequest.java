@@ -6,7 +6,5 @@ import jakarta.validation.constraints.NotEmpty;
 public record LoginRequest(@Email
                            String email,
                            @NotEmpty
-                           String password,
-                           @NotEmpty
-                           String instanceId) {
+                           String password) {
 }

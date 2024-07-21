@@ -3,6 +3,8 @@ package com.lsm.ws.user.context.auth;
 import com.lsm.ws.user.context.auth.dto.AuthResponse;
 import com.lsm.ws.user.context.auth.dto.LoginRequest;
 import com.lsm.ws.user.context.auth.dto.RegisterRequest;
+import com.lsm.ws.user.infrastructure.jwt.JwtAccess;
+import com.lsm.ws.user.infrastructure.jwt.JwtType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,6 +43,7 @@ public class AuthEndpoint {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @JwtAccess({JwtType.REFRESH})
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh() {
         return ResponseEntity.ok(authService.refresh());

@@ -32,7 +32,7 @@ public class JwtService {
                    .claim(JwtClaims.ROLE, user.role().name())
                    .claim(JwtClaims.USER_ID, user.id().toString())
                    .issuedAt(new Date(System.currentTimeMillis()))
-                   .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.tokenExpiration()))
+                   .expiration(new Date(System.currentTimeMillis() + 60_000L * jwtProperties.tokenExpiration()))
                    .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
                    .compact();
     }
@@ -43,7 +43,7 @@ public class JwtService {
                    .claim(JwtClaims.TYPE, JwtType.REFRESH.name())
                    .claim(JwtClaims.ORIGINAL_TOKEN, token)
                    .issuedAt(new Date(System.currentTimeMillis()))
-                   .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.refreshTokenExpiration()))
+                   .expiration(new Date(System.currentTimeMillis() + 60_000L * jwtProperties.refreshTokenExpiration()))
                    .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
                    .compact();
     }
@@ -54,7 +54,7 @@ public class JwtService {
         var newToken = Jwts.builder()
                            .claims(claims)
                            .issuedAt(new Date(System.currentTimeMillis()))
-                           .expiration(new Date(System.currentTimeMillis() + 60L * jwtProperties.refreshTokenExpiration()))
+                           .expiration(new Date(System.currentTimeMillis() + 60_000L * jwtProperties.refreshTokenExpiration()))
                            .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
                            .compact();
         var refreshToken = generateRefreshToken(newToken);

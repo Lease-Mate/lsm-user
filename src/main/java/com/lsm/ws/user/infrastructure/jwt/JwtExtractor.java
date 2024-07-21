@@ -3,6 +3,7 @@ package com.lsm.ws.user.infrastructure.jwt;
 import com.lsm.ws.user.configuration.exception.unauthorized.JwtAuthenticationException;
 import com.lsm.ws.user.configuration.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class JwtExtractor {
 
     public JwtExtractor(JwtProperties jwtProperties) {
         this.jwtParser = Jwts.parser()
-                             .decryptWith(jwtProperties.getSignKey())
+                             .verifyWith(jwtProperties.getSignKey())
                              .build();
     }
 
@@ -42,6 +43,8 @@ public class JwtExtractor {
     public Claims validateTokenAndExtractClaims(String token) {
         try {
             return jwtParser.parseSignedClaims(token).getPayload();
+        } catch (ExpiredJwtException ignored) {
+            throw new JwtAuthenticationException("Token expired");
         } catch (Exception ignored) {
             throw new JwtAuthenticationException("Incorrect jwt");
         }

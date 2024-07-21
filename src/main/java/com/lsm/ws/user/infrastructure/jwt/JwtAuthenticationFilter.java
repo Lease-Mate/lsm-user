@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwtExtractor.validateTokenAndExtractClaims(token);
             filterChain.doFilter(request, response);
         } catch (Exception ex) {
+            LOG.info("Failed jwt authentication reason: {}", ex.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, ex);
         }
     }

@@ -74,10 +74,6 @@ public class AuthService {
     }
 
     public AuthResponse refresh() {
-        if (requestContext.tokenType() != JwtType.REFRESH){
-            // TODO: 20/07/2024 change to forbidden
-            throw new UnauthorizedException("Invalid token type - allowed token type: REFRESH");
-        }
         var tokenPair = jwtService.refreshToken(requestContext.originalToken());
         return AuthResponse.from(tokenPair);
     }
