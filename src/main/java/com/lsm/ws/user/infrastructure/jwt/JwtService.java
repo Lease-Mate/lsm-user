@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @EnableConfigurationProperties(JwtProperties.class)
@@ -20,45 +22,41 @@ public class JwtService {
         this.jwtExtractor = jwtExtractor;
     }
 
-    public TokenPair generateWebToken(User user) {
-        var authToken = generateToken(user, JwtType.WEB);
-        var refreshToken = generateRefreshToken(authToken);
-        return new TokenPair(authToken, refreshToken);
+    public TokenPair generateUserWebToken(User user) {
+        return generateWebToken(user, JwtType.WEB);
     }
 
-    private String generateToken(User user, JwtType jwtType) {
-        return Jwts.builder()
-                   .claim(JwtClaims.TYPE, jwtType.name())
-                   .claim(JwtClaims.ROLE, user.role().name())
-                   .claim(JwtClaims.USER_ID, user.id().toString())
-                   .issuedAt(new Date(System.currentTimeMillis()))
-                   .expiration(new Date(System.currentTimeMillis() + 60_000L * jwtProperties.tokenExpiration()))
-                   .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
-                   .compact();
-    }
-
-
-    private String generateRefreshToken(String token) {
-        return Jwts.builder()
-                   .claim(JwtClaims.TYPE, JwtType.REFRESH.name())
-                   .claim(JwtClaims.ORIGINAL_TOKEN, token)
-                   .issuedAt(new Date(System.currentTimeMillis()))
-                   .expiration(new Date(System.currentTimeMillis() + 60_000L * jwtProperties.refreshTokenExpiration()))
-                   .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
-                   .compact();
+    private TokenPair generateWebToken(User user, JwtType jwtType) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaims.TYPE, jwtType.name());
+        claims.put(JwtClaims.ROLE, user.role().name());
+        claims.put(JwtClaims.USER_ID, user.id().toString());
+        var token = generateToken(claims, jwtProperties.tokenExpiration());
+        var refreshToken = generateRefreshToken(token);
+        return new TokenPair(token, refreshToken);
     }
 
     public TokenPair refreshToken(String originalToken) {
         var claims = jwtExtractor.validateTokenAndExtractClaims(originalToken);
 
-        var newToken = Jwts.builder()
-                           .claims(claims)
-                           .issuedAt(new Date(System.currentTimeMillis()))
-                           .expiration(new Date(System.currentTimeMillis() + 60_000L * jwtProperties.refreshTokenExpiration()))
-                           .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
-                           .compact();
+        var newToken = generateToken(claims, jwtProperties.tokenExpiration());
         var refreshToken = generateRefreshToken(newToken);
-
         return new TokenPair(newToken, refreshToken);
+    }
+
+    private String generateRefreshToken(String token) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaims.TYPE, JwtType.REFRESH.name());
+        claims.put(JwtClaims.ORIGINAL_TOKEN, token);
+        return generateToken(claims, jwtProperties.refreshTokenExpiration());
+    }
+
+    private String generateToken(Map<String, Object> claims, Integer expirationInMinutes) {
+        return Jwts.builder()
+                   .claims(claims)
+                   .issuedAt(new Date(System.currentTimeMillis()))
+                   .expiration(new Date(System.currentTimeMillis() + 60_000L * expirationInMinutes))
+                   .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
+                   .compact();
     }
 }

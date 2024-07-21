@@ -2,7 +2,6 @@ package com.lsm.ws.user.context.auth;
 
 import com.lsm.ws.user.configuration.exception.InvalidCredentialsException;
 import com.lsm.ws.user.configuration.exception.UserAlreadyExistsException;
-import com.lsm.ws.user.configuration.exception.unauthorized.UnauthorizedException;
 import com.lsm.ws.user.context.auth.dto.AuthResponse;
 import com.lsm.ws.user.context.auth.dto.LoginRequest;
 import com.lsm.ws.user.context.auth.dto.RegisterRequest;
@@ -10,7 +9,6 @@ import com.lsm.ws.user.domain.user.User;
 import com.lsm.ws.user.domain.user.UserRepository;
 import com.lsm.ws.user.domain.user.UserRole;
 import com.lsm.ws.user.infrastructure.jwt.JwtService;
-import com.lsm.ws.user.infrastructure.jwt.JwtType;
 import com.lsm.ws.user.infrastructure.rest.context.RequestContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,7 +51,7 @@ public class AuthService {
                        .build();
         user = userRepository.save(user);
 
-        var tokenPair = jwtService.generateWebToken(user);
+        var tokenPair = jwtService.generateUserWebToken(user);
         return AuthResponse.from(tokenPair);
     }
 
@@ -65,7 +63,7 @@ public class AuthService {
             throw new InvalidCredentialsException();
         }
 
-        var tokenPair = jwtService.generateWebToken(user);
+        var tokenPair = jwtService.generateUserWebToken(user);
         return AuthResponse.from(tokenPair);
     }
 
