@@ -49,7 +49,8 @@ public class SecurityConfiguration implements WebSecurityCustomizer {
                    "/swagger-ui/**",
                    "/v3/api-docs/**",
                    "/v1/api/user/auth/login",
-                   "/v1/api/user/auth/register");
+                   "/v1/api/user/auth/register",
+                   "/manage/**");
     }
 
 }

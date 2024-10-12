@@ -8,12 +8,23 @@ server:
 spring:
   application:
     name: lsm-user
+  web:
+    resources:
+      add-mappings: false
   datasource:
     username: lsm_user
   liquibase:
     change-log: db/changelog/changelog.yml
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+  endpoint:
+    metrics:
+      enabled: true
 
 jwt:
   token-expiration: 10m
