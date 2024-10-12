@@ -48,4 +48,11 @@ public class AuthEndpoint {
     public ResponseEntity<AuthResponse> refresh() {
         return ResponseEntity.ok(authService.refresh());
     }
+
+    @JwtAccess({JwtType.WEB})
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        authService.logout();
+        return ResponseEntity.ok().build();
+    }
 }

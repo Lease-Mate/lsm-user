@@ -8,14 +8,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 
 @ConfigurationProperties(prefix = "jwt")
 public record JwtProperties(@NotEmpty
                             String secret,
                             @NotNull
-                            Integer tokenExpiration,
+                            Duration tokenExpiration,
                             @NotNull
-                            Integer refreshTokenExpiration) {
+                            Duration refreshTokenExpiration) {
 
     public SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(this.secret());

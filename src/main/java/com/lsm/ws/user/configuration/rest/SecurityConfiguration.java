@@ -1,5 +1,6 @@
 package com.lsm.ws.user.configuration.rest;
 
+import com.lsm.ws.user.domain.cache.JwtBlacklistStore;
 import com.lsm.ws.user.infrastructure.jwt.JwtAuthenticationFilter;
 import com.lsm.ws.user.infrastructure.jwt.JwtExtractor;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,10 @@ public class SecurityConfiguration implements WebSecurityCustomizer {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfiguration(JwtExtractor jwtExtractor, HandlerExceptionResolver handlerExceptionResolver) {
-        this.jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtExtractor, handlerExceptionResolver);
+    public SecurityConfiguration(JwtExtractor jwtExtractor, HandlerExceptionResolver handlerExceptionResolver,
+                                 JwtBlacklistStore jwtBlacklistStore) {
+        this.jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtExtractor, jwtBlacklistStore,
+                handlerExceptionResolver);
     }
 
 

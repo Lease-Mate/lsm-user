@@ -53,6 +53,7 @@ public class RequestContextFactory {
                              .withTokenType(tokenType)
                              .withUserRole(role)
                              .withUserId(userId)
+                             .withOriginalToken(jwt)
                              .build();
     }
 

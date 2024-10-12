@@ -5,6 +5,7 @@ import com.lsm.ws.user.configuration.exception.UserAlreadyExistsException;
 import com.lsm.ws.user.context.auth.dto.AuthResponse;
 import com.lsm.ws.user.context.auth.dto.LoginRequest;
 import com.lsm.ws.user.context.auth.dto.RegisterRequest;
+import com.lsm.ws.user.domain.cache.JwtBlacklistStore;
 import com.lsm.ws.user.domain.user.User;
 import com.lsm.ws.user.domain.user.UserRepository;
 import com.lsm.ws.user.domain.user.UserRole;
@@ -24,16 +25,19 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RequestContext requestContext;
+    private final JwtBlacklistStore jwtBlacklistStore;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            RequestContext requestContext) {
+            RequestContext requestContext,
+            JwtBlacklistStore jwtBlacklistStore) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.requestContext = requestContext;
+        this.jwtBlacklistStore = jwtBlacklistStore;
     }
 
     @Transactional
@@ -74,5 +78,9 @@ public class AuthService {
     public AuthResponse refresh() {
         var tokenPair = jwtService.refreshToken(requestContext.originalToken());
         return AuthResponse.from(tokenPair);
+    }
+
+    public void logout() {
+        jwtBlacklistStore.put(requestContext.originalToken());
     }
 }

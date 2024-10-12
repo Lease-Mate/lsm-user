@@ -16,5 +16,13 @@ spring:
     exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
 jwt:
-  token-expiration: 10
-  refresh-token-expiration: 20
+  token-expiration: 10m
+  refresh-token-expiration: 20m
+
+cache:
+  stores:
+    jwt-blacklist:
+      mode: REPLICATED
+      expiration: ${jwt.token-expiration}
+  communication-port: 47100
+  discovery-port: 47500

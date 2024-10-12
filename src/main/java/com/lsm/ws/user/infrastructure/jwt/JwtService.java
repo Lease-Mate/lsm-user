@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,11 +52,11 @@ public class JwtService {
         return generateToken(claims, jwtProperties.refreshTokenExpiration());
     }
 
-    private String generateToken(Map<String, Object> claims, Integer expirationInMinutes) {
+    private String generateToken(Map<String, Object> claims, Duration expiration) {
         return Jwts.builder()
                    .claims(claims)
                    .issuedAt(new Date(System.currentTimeMillis()))
-                   .expiration(new Date(System.currentTimeMillis() + 60_000L * expirationInMinutes))
+                   .expiration(new Date(System.currentTimeMillis() + expiration.toMillis()))
                    .signWith(jwtProperties.getSignKey(), Jwts.SIG.HS256)
                    .compact();
     }

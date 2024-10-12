@@ -30,11 +30,29 @@
         </repository>
     </distributionManagement>
 
+    <properties>
+        <ignite.version>2.16.0</ignite.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>4.28.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-core</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-slf4j</artifactId>
+            <version>${ignite.version}</version>
         </dependency>
     </dependencies>
 
