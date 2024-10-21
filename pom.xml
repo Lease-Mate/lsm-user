@@ -19,20 +19,12 @@
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/Lease-Mate</url>
+            <url>https://maven.pkg.github.com/Lease-Mate/parent-pom</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/Lease-Mate</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <ignite.version>2.16.0</ignite.version>
