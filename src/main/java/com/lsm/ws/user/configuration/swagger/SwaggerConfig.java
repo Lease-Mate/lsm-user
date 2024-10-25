@@ -13,20 +13,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    private static final String DEMO_USER_GROUP = "demo-user";
-    private static final String DEMO_USER_PATH = "/v1/api/user/**";
+    private static final String LSM_USER_GROUP = "lsm-user";
+    private static final String LSM_USER_PATH = "/v1/api/user/**";
 
     @Bean
     public GroupedOpenApi groupedOpenApi() {
         return GroupedOpenApi.builder()
-                             .group(DEMO_USER_GROUP)
-                             .pathsToMatch(DEMO_USER_PATH)
+                             .group(LSM_USER_GROUP)
+                             .pathsToMatch(LSM_USER_PATH)
                              .build();
     }
 
     @Bean
     public OpenAPI openAPI() {
-        var openApi = new OpenAPI().info(new Info().description("Demo user microservice")
+        var openApi = new OpenAPI().info(new Info().description("LeaseMate user microservice")
                                                    .title("User microservice"))
                                    .addServersItem(new Server().url("/"));
         addAuthBearer(openApi);

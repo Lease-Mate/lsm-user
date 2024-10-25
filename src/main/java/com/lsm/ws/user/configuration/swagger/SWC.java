@@ -9,4 +9,7 @@ public final class SWC {
     public static final String AUTH_LOGIN = "Log in";
     public static final String AUTH_LOGIN_DESC = """
             log in""";
+    public static final String AUTH_VERIFY = "Verify";
+    public static final String AUTH_VERIFY_DESC = """
+            verify token""";
 }

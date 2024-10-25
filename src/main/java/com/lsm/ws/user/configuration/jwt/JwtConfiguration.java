@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class JwtConfiguration {
 
     @Bean
-    JwtAccessAspect jwtAccessAspect(RequestContext requestContext){
+    JwtAccessAspect jwtAccessAspect(RequestContext requestContext) {
         return new JwtAccessAspect(requestContext);
     }
 }
