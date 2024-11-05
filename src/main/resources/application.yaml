@@ -11,7 +11,7 @@ spring:
   web:
     resources:
       add-mappings: false
-    locale: en_EN
+    locale: pl_PL
     locale-resolver: fixed
   datasource:
     username: lsm_user
