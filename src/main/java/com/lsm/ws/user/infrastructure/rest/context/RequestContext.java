@@ -1,24 +1,18 @@
 package com.lsm.ws.user.infrastructure.rest.context;
 
-import com.lsm.ws.user.domain.user.UserRole;
 import com.lsm.ws.user.infrastructure.jwt.JwtType;
-
-import java.util.UUID;
 
 public class RequestContext {
     private final JwtType tokenType;
-    private final UserRole userRole;
-    private final UUID userId;
+    private final String userId;
     private final String originalToken;
 
     public RequestContext(
             JwtType tokenType,
-            UserRole userRole,
-            UUID userId,
+            String userId,
             String originalToken
     ) {
         this.tokenType = tokenType;
-        this.userRole = userRole;
         this.userId = userId;
         this.originalToken = originalToken;
     }
@@ -31,11 +25,7 @@ public class RequestContext {
         return tokenType;
     }
 
-    public UserRole userRole() {
-        return userRole;
-    }
-
-    public UUID userId() {
+    public String userId() {
         return userId;
     }
 

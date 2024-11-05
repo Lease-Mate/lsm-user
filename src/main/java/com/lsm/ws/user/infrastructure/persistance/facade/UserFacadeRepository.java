@@ -30,4 +30,10 @@ public class UserFacadeRepository implements UserRepository {
         return userJpaRepository.findByEmail(email)
                                 .map(UserEntity::toUser);
     }
+
+    @Override
+    public Optional<User> findById(String id) {
+        return userJpaRepository.findById(id)
+                                .map(UserEntity::toUser);
+    }
 }

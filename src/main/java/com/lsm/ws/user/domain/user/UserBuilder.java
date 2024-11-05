@@ -1,15 +1,18 @@
 package com.lsm.ws.user.domain.user;
 
-import java.util.UUID;
+import java.util.Date;
 
 public class UserBuilder {
 
-    private UUID id;
+    private String id;
     private String email;
+    private String name;
+    private String surname;
+    private Date dateOfBirth;
     private UserRole role;
     private byte[] password;
 
-    public UserBuilder withId(UUID id) {
+    public UserBuilder withId(String id) {
         this.id = id;
         return this;
     }
@@ -29,7 +32,22 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public UserBuilder withSurname(String surname) {
+        this.surname = surname;
+        return this;
+    }
+
+    public UserBuilder withDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+        return this;
+    }
+
     public User build() {
-        return new User(id, email, role, password);
+        return new User(id, email, name, surname, dateOfBirth, role, password);
     }
 }

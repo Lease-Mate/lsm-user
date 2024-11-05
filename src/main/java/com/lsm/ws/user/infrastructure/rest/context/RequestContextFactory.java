@@ -1,7 +1,6 @@
 package com.lsm.ws.user.infrastructure.rest.context;
 
 import com.lsm.ws.user.configuration.exception.unauthorized.JwtAuthenticationException;
-import com.lsm.ws.user.domain.user.UserRole;
 import com.lsm.ws.user.infrastructure.jwt.JwtClaims;
 import com.lsm.ws.user.infrastructure.jwt.JwtExtractor;
 import com.lsm.ws.user.infrastructure.jwt.JwtType;
@@ -10,8 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.annotation.RequestScope;
-
-import java.util.UUID;
 
 @Configuration
 public class RequestContextFactory {
@@ -40,18 +37,12 @@ public class RequestContextFactory {
             return requestContextForRefreshToken(claims);
         }
 
-        var role = jwtExtractor.extractClaim(JwtClaims.ROLE, claims)
-                               .map(UserRole::valueOf)
-                               .orElseThrow(() -> new JwtAuthenticationException(
-                                       "Error during extracting user role"));
         var userId = jwtExtractor.extractClaim(JwtClaims.USER_ID, claims)
-                                 .map(UUID::fromString)
                                  .orElseThrow(() -> new JwtAuthenticationException(
                                          "Error during extracting user id"
                                  ));
         return RequestContext.builder()
                              .withTokenType(tokenType)
-                             .withUserRole(role)
                              .withUserId(userId)
                              .withOriginalToken(jwt)
                              .build();
