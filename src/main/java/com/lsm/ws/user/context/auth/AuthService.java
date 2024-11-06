@@ -42,12 +42,15 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        userRepository.findByEmail(request.email().toLowerCase(Locale.getDefault()))
-                      .ifPresent(UserAlreadyExistsException::new);
+        var email = request.email().toLowerCase(Locale.getDefault()).trim();
+        userRepository.findByEmail(email)
+                      .ifPresent(u -> {
+                          throw new UserAlreadyExistsException(u);
+                      });
 
         var user = User.builder()
                        .withId(UUID.randomUUID().toString())
-                       .withEmail(request.email())
+                       .withEmail(email)
                        .withName(request.name())
                        .withSurname(request.surname())
                        .withDateOfBirth(request.dateOfBirth())

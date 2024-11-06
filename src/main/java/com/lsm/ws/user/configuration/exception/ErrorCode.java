@@ -7,11 +7,12 @@ public enum ErrorCode {
     TRY_AGAIN_LATER("003", "Spróbuj ponownie później"),
     USER_DOESNT_EXIST("004", "Użytkownik nie istnieje");
 
+    private static final String MICROSERVICE_PREFIX = "lsm-offer-";
     private final String code;
     private final String message;
 
     ErrorCode(String code, String message) {
-        this.code = code;
+        this.code = MICROSERVICE_PREFIX + code;
         this.message = message;
     }
 
