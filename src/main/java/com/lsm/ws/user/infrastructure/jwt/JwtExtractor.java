@@ -32,10 +32,10 @@ public class JwtExtractor {
     public String extractJwtFromRequest(HttpServletRequest request) {
         var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isEmpty(request.getHeader(HttpHeaders.AUTHORIZATION))) {
-            throw new JwtAuthenticationException("Empty auth header");
+            throw new JwtAuthenticationException("Pusty nagłówek autoryzacyjny");
         }
         if (!authHeader.startsWith(BEARER_AUTH)) {
-            throw new JwtAuthenticationException("Incorrect authorization header");
+            throw new JwtAuthenticationException("Niepoprawny nagłówek autoryzacyjny");
         }
         return authHeader.substring(7);
     }
@@ -44,9 +44,9 @@ public class JwtExtractor {
         try {
             return jwtParser.parseSignedClaims(token).getPayload();
         } catch (ExpiredJwtException ignored) {
-            throw new JwtAuthenticationException("Token expired");
+            throw new JwtAuthenticationException("Sesja wygasła");
         } catch (Exception ignored) {
-            throw new JwtAuthenticationException("Incorrect jwt");
+            throw new JwtAuthenticationException("Niepoprawny token jwt");
         }
     }
 
