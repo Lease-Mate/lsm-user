@@ -9,7 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "app_user")
@@ -29,7 +29,7 @@ public class UserEntity {
     private String surname;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
@@ -72,7 +72,7 @@ public class UserEntity {
         this.surname = surname;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

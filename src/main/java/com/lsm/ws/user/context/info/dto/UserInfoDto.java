@@ -2,7 +2,7 @@ package com.lsm.ws.user.context.info.dto;
 
 import com.lsm.ws.user.domain.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class UserInfoDto {
 
@@ -10,7 +10,7 @@ public class UserInfoDto {
     public String email;
     public String name;
     public String surname;
-    public Date dateOfBirth;
+    public LocalDate dateOfBirth;
 
     public static UserInfoDto from(User user) {
         UserInfoDto dto = new UserInfoDto();

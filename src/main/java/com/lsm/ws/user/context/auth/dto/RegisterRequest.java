@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Validated
 public record RegisterRequest(@Email
@@ -22,5 +22,5 @@ public record RegisterRequest(@Email
                               String surname,
 
                               @NotNull
-                              Date dateOfBirth) {
+                              LocalDate dateOfBirth) {
 }

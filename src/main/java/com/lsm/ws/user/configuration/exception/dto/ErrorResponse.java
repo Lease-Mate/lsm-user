@@ -2,9 +2,9 @@ package com.lsm.ws.user.configuration.exception.dto;
 
 public class ErrorResponse {
 
-    public final String message;
+    public final String error;
 
-    public ErrorResponse(String message) {
-        this.message = message;
+    public ErrorResponse(String error) {
+        this.error = error;
     }
 }

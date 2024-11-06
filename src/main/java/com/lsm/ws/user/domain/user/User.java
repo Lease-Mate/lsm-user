@@ -1,6 +1,6 @@
 package com.lsm.ws.user.domain.user;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class User {
 
@@ -8,11 +8,18 @@ public class User {
     private final String email;
     private final String name;
     private final String surname;
-    private final Date dateOfBirth;
+    private final LocalDate dateOfBirth;
     private final UserRole role;
     private final byte[] password;
 
-    public User(String id, String email, String name, String surname, Date dateOfBirth, UserRole role, byte[] password) {
+    public User(
+            String id,
+            String email,
+            String name,
+            String surname,
+            LocalDate dateOfBirth,
+            UserRole role,
+            byte[] password) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -42,7 +49,7 @@ public class User {
         return surname;
     }
 
-    public Date dateOfBirth() {
+    public LocalDate dateOfBirth() {
         return dateOfBirth;
     }
 

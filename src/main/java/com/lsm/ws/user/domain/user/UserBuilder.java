@@ -1,6 +1,6 @@
 package com.lsm.ws.user.domain.user;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class UserBuilder {
 
@@ -8,7 +8,7 @@ public class UserBuilder {
     private String email;
     private String name;
     private String surname;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private UserRole role;
     private byte[] password;
 
@@ -42,7 +42,7 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder withDateOfBirth(Date dateOfBirth) {
+    public UserBuilder withDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }

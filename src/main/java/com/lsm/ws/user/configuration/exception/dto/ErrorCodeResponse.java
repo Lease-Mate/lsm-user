@@ -4,8 +4,8 @@ public class ErrorCodeResponse extends ErrorResponse {
 
     public final String code;
 
-    public ErrorCodeResponse(String code, String message) {
-        super(message);
+    public ErrorCodeResponse(String code, String error) {
+        super(error);
         this.code = code;
     }
 }
