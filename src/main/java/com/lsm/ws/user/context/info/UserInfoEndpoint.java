@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,4 +37,12 @@ public class UserInfoEndpoint {
         return ResponseEntity.ok(UserInfoDto.from(user));
     }
 
+    @Operation(summary = INFO, description = "returns specified user info")
+    @GetMapping("/{userId}/info")
+    public ResponseEntity<UserInfoDto> info(@PathVariable String userId) {
+        var user = userRepository.findById(userId)
+                                 .orElseThrow(UserDontExistException::new);
+
+        return ResponseEntity.ok(UserInfoDto.from(user));
+    }
 }
