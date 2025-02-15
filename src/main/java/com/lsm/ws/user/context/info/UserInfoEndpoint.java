@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/api/user/")
-@Tag(name = "Offer services")
+@Tag(name = "Informacje o użytkownikach")
 public class UserInfoEndpoint {
 
     private static final String INFO = "User information";
@@ -28,7 +28,8 @@ public class UserInfoEndpoint {
         this.requestContext = requestContext;
     }
 
-    @Operation(summary = INFO, description = INFO_DESC)
+    @Operation(summary = "Informacje o zalogowanym użytkowniku",
+            description = "Zwraca informacje o zalogowanym użytkowniku")
     @GetMapping("/info")
     public ResponseEntity<UserInfoDto> info() {
         var user = userRepository.findById(requestContext.userId())
@@ -37,7 +38,7 @@ public class UserInfoEndpoint {
         return ResponseEntity.ok(UserInfoDto.from(user));
     }
 
-    @Operation(summary = INFO, description = "returns specified user info")
+    @Operation(summary = "Informacje o użytkowniku", description = "Zwraca informacje o danym użytkowniku")
     @GetMapping("/{userId}/info")
     public ResponseEntity<UserInfoDto> info(@PathVariable String userId) {
         var user = userRepository.findById(userId)
