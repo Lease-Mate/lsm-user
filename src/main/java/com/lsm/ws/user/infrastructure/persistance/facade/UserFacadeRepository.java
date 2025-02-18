@@ -36,4 +36,9 @@ public class UserFacadeRepository implements UserRepository {
         return userJpaRepository.findById(id)
                                 .map(UserEntity::toUser);
     }
+
+    @Override
+    public void delete(String userId) {
+        userJpaRepository.deleteById(userId);
+    }
 }

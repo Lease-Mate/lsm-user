@@ -7,25 +7,27 @@ import com.lsm.ws.user.infrastructure.rest.context.RequestContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/v1/api/user/")
 @Tag(name = "Informacje o użytkownikach")
 public class UserInfoEndpoint {
 
-    private static final String INFO = "User information";
-    private static final String INFO_DESC = "returns logged user information";
-
     private final UserRepository userRepository;
     private final RequestContext requestContext;
+    private final UserService userService;
 
-    public UserInfoEndpoint(UserRepository userRepository, RequestContext requestContext) {
+    public UserInfoEndpoint(UserRepository userRepository, RequestContext requestContext, UserService userService) {
         this.userRepository = userRepository;
         this.requestContext = requestContext;
+        this.userService = userService;
     }
 
     @Operation(summary = "Informacje o zalogowanym użytkowniku",
@@ -45,5 +47,12 @@ public class UserInfoEndpoint {
                                  .orElseThrow(UserDontExistException::new);
 
         return ResponseEntity.ok(UserInfoDto.from(user));
+    }
+
+    @Operation(summary = "Usuń konto", description = "Usuwa konto zalogowanego użytkownika oraz wylogowuje sesję")
+    @DeleteMapping()
+    public ResponseEntity<Void> delete() {
+        userService.delete();
+        return ResponseEntity.ok().build();
     }
 }
