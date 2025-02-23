@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v1/api/user/")
+@RequestMapping("/v1/api/user")
 @Tag(name = "Informacje o użytkownikach")
 public class UserInfoEndpoint {
 
